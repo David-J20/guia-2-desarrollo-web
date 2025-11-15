@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check login status and update navigation
     utils.updateNavigation();
 
+    // Mostrar/ocultar botón de logout según sesión
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        if (utils.isLoggedIn()) {
+            logoutBtn.style.display = 'inline-block';
+        } else {
+            logoutBtn.style.display = 'none';
+        }
+        logoutBtn.addEventListener('click', () => utils.logout());
+    }
+
     // Redirect if trying to access protected pages while not logged in
     const currentPage = window.location.pathname;
     if ((currentPage.includes('profile.html') || currentPage.includes('contacts.html')) && !utils.isLoggedIn()) {
@@ -18,11 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Logout button handling
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => utils.logout());
-    }
+    // 2.5.9 Tab switching for login/register
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.dataset.tab;
+            switchTab(tabName);
+        });
+    });
 
     // Login form handling
     const loginForm = document.getElementById('loginForm');
@@ -30,11 +44,90 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.addEventListener('submit', handleLogin);
     }
 
+    // 2.5.9 Register form handling
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegister);
+    }
+
     // Profile page handling
     const profilePage = document.getElementById('userName');
     if (profilePage) {
         loadProfileData();
         initializeGithubSection();
+
+        // Habilidades
+        const addSkillForm = document.getElementById('addSkillForm');
+        const skillsList = document.getElementById('skillsList');
+        let skills = [];
+        if (addSkillForm) {
+            addSkillForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const skill = document.getElementById('newSkill').value.trim();
+                if (skill) {
+                    skills.push(skill);
+                    renderSkills();
+                    addSkillForm.reset();
+                }
+            });
+        }
+        function renderSkills() {
+            skillsList.innerHTML = skills.map(s => `<span class="skill-tag">${s}</span>`).join(' ');
+        }
+
+        // Experiencia
+        const addExpForm = document.getElementById('addExpForm');
+        const experienceList = document.getElementById('experienceList');
+        let experiences = [];
+        if (addExpForm) {
+            addExpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const position = document.getElementById('newExpPosition').value.trim();
+                const company = document.getElementById('newExpCompany').value.trim();
+                const period = document.getElementById('newExpPeriod').value.trim();
+                if (position && company && period) {
+                    experiences.push({ position, company, period });
+                    renderExperiences();
+                    addExpForm.reset();
+                }
+            });
+        }
+        function renderExperiences() {
+            experienceList.innerHTML = experiences.map(exp => `
+                <div class="exp-item">
+                    <strong>${exp.position}</strong> en ${exp.company} <span class="exp-period">(${exp.period})</span>
+                </div>
+            `).join('');
+        }
+
+        // Buscar contactos (solo frontend demo)
+        const searchContactsInput = document.getElementById('searchContacts');
+        const contactsList = document.getElementById('contactsList');
+        let demoContacts = [
+            { name: 'Ana Torres', skills: ['JavaScript', 'React'], title: 'Frontend Dev' },
+            { name: 'Luis Gómez', skills: ['PHP', 'MySQL'], title: 'Backend Dev' },
+            { name: 'Sofía Ruiz', skills: ['Python', 'Django'], title: 'Fullstack Dev' }
+        ];
+        function renderContactsList(contacts) {
+            contactsList.innerHTML = contacts.map(c => `
+                <div class="contact-card">
+                    <h4>${c.name}</h4>
+                    <p>${c.title}</p>
+                    <div class="skills-tags">${c.skills.map(s => `<span class="skill-tag">${s}</span>`).join(' ')}</div>
+                </div>
+            `).join('');
+        }
+        if (searchContactsInput && contactsList) {
+            renderContactsList(demoContacts);
+            searchContactsInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = demoContacts.filter(c =>
+                    c.name.toLowerCase().includes(query) ||
+                    c.skills.some(s => s.toLowerCase().includes(query))
+                );
+                renderContactsList(filtered);
+            });
+        }
     }
 
     // Contacts page handling
@@ -44,18 +137,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 2.6.4 Login form handler
-const handleLogin = (e) => {
+// 2.5.9 Tab switching function
+const switchTab = (tabName) => {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    // Deactivate all buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
+
+    // Show selected tab
+    document.getElementById(`${tabName}-tab`).classList.add('active');
+    
+    // Activate selected button
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+    // Clear any previous error messages
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+};
+
+// 2.6.4 & 2.5.9 Login form handler - AJAX integration with backend
+const handleLogin = async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
+    // Client-side validation
     const validation = utils.validateLoginForm(email, password);
-    if (validation.isValid) {
-        // Simulate login - in a real app, this would verify credentials with a server
-        utils.setLoggedIn('1'); // Using '1' as a dummy user ID
-        window.location.href = 'profile.html';
-    } else {
+    if (!validation.isValid) {
         // Show errors
         Object.keys(validation.errors).forEach(key => {
             const input = document.getElementById(key);
@@ -63,36 +175,159 @@ const handleLogin = (e) => {
             const errorMsg = utils.createElement('span', 'error-message', validation.errors[key]);
             input.parentNode.appendChild(errorMsg);
         });
+        return;
+    }
+
+    // Clear previous errors
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+    document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+
+    try {
+        // Call backend API for login
+        const response = await fetch('backend/api/index.php?action=login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Login successful - save session
+            utils.setLoggedIn(data.id);
+            // Redirect to profile
+            window.location.href = 'profile.html';
+        } else {
+            // Show error message
+            const errorMsg = utils.createElement('div', 'error-message', data.message || 'Error al iniciar sesión');
+            errorMsg.style.marginTop = '1rem';
+            errorMsg.style.color = '#e74c3c';
+            errorMsg.style.padding = '0.5rem';
+            errorMsg.style.backgroundColor = '#fff5f5';
+            errorMsg.style.borderRadius = '4px';
+            document.querySelector('.login-form').appendChild(errorMsg);
+        }
+    } catch (error) {
+        console.error('Error en login:', error);
+        const errorMsg = utils.createElement('div', 'error-message', 'Error de conexión. Intenta más tarde.');
+        errorMsg.style.marginTop = '1rem';
+        errorMsg.style.color = '#e74c3c';
+        errorMsg.style.padding = '0.5rem';
+        errorMsg.style.backgroundColor = '#fff5f5';
+        errorMsg.style.borderRadius = '4px';
+        document.querySelector('.login-form').appendChild(errorMsg);
+    }
+};
+
+// 2.5.9 Register form handler - AJAX integration with backend
+const handleRegister = async (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('reg-nombre').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const especialidad = document.getElementById('reg-especialidad').value;
+
+    // Clear previous errors
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+    // Basic validation
+    if (!nombre || !email || !password || !especialidad) {
+        const errorMsg = utils.createElement('div', 'error-message', 'Por favor completa todos los campos');
+        errorMsg.style.marginTop = '1rem';
+        errorMsg.style.color = '#e74c3c';
+        errorMsg.style.padding = '0.5rem';
+        errorMsg.style.backgroundColor = '#fff5f5';
+        errorMsg.style.borderRadius = '4px';
+        document.querySelector('#registerForm').appendChild(errorMsg);
+        return;
+    }
+
+    try {
+        // Call backend API for registration
+        const response = await fetch('backend/api/index.php?action=register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nombre: nombre,
+                email: email,
+                password: password,
+                especialidad: especialidad
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Registration successful - show success message and switch to login tab
+            const successMsg = utils.createElement('div', 'success-message', '✅ Cuenta creada con éxito. Ahora puedes iniciar sesión.');
+            successMsg.style.marginTop = '1rem';
+            successMsg.style.color = '#27ae60';
+            successMsg.style.padding = '0.5rem';
+            successMsg.style.backgroundColor = '#f0fdf4';
+            successMsg.style.borderRadius = '4px';
+            document.querySelector('#registerForm').appendChild(successMsg);
+
+            // Reset form
+            document.getElementById('registerForm').reset();
+
+            // Switch to login tab after 2 seconds
+            setTimeout(() => {
+                switchTab('login');
+            }, 2000);
+        } else {
+            // Show error message
+            const errorMsg = utils.createElement('div', 'error-message', data.message || 'Error al crear la cuenta');
+            errorMsg.style.marginTop = '1rem';
+            errorMsg.style.color = '#e74c3c';
+            errorMsg.style.padding = '0.5rem';
+            errorMsg.style.backgroundColor = '#fff5f5';
+            errorMsg.style.borderRadius = '4px';
+            document.querySelector('#registerForm').appendChild(errorMsg);
+        }
+    } catch (error) {
+        console.error('Error en registro:', error);
+        const errorMsg = utils.createElement('div', 'error-message', 'Error de conexión. Intenta más tarde.');
+        errorMsg.style.marginTop = '1rem';
+        errorMsg.style.color = '#e74c3c';
+        errorMsg.style.padding = '0.5rem';
+        errorMsg.style.backgroundColor = '#fff5f5';
+        errorMsg.style.borderRadius = '4px';
+        document.querySelector('#registerForm').appendChild(errorMsg);
     }
 };
 
 // 2.6.4 Profile page handler
-const loadProfileData = () => {
-    // Simulate loading user data
-    const userData = dataModule.getUserById(1);
-    
-    document.getElementById('userName').textContent = userData.name;
-    document.getElementById('userTitle').textContent = userData.title;
-    document.getElementById('profileIcon').className = `user-icon ${userData.icon}`;
-
-    // Load skills
-    const skillsList = document.getElementById('skillsList');
-    userData.skills.forEach(skill => {
-        const skillElement = utils.createElement('span', 'skill-tag', skill);
-        skillsList.appendChild(skillElement);
-    });
-
-    // Load experience
-    const experienceList = document.getElementById('experienceList');
-    userData.experience.forEach(exp => {
-        const expElement = utils.createElement('div', 'experience-item');
-        expElement.innerHTML = `
-            <h5>${exp.position}</h5>
-            <p>${exp.company}</p>
-            <span>${exp.period}</span>
-        `;
-        experienceList.appendChild(expElement);
-    });
+const loadProfileData = async () => {
+    try {
+        const response = await fetch('backend/api/index.php?action=get-user', {
+            method: 'GET',
+            credentials: 'same-origin'
+        });
+        const data = await response.json();
+        if (!data.success || !data.user) {
+            window.location.href = 'login.html';
+            return;
+        }
+        const userData = data.user;
+        document.getElementById('userName').textContent = userData.nombre;
+        document.getElementById('userTitle').textContent = userData.especialidad;
+        document.getElementById('profileIcon').className = `user-icon`;
+        // Puedes personalizar el icono según especialidad si lo deseas
+        // Limpiar skills y experiencia
+        document.getElementById('skillsList').innerHTML = '';
+        document.getElementById('experienceList').innerHTML = '';
+        // Si tienes skills/experiencia en la base de datos, aquí puedes agregarlas
+        // Por ahora solo muestra nombre y especialidad
+    } catch (error) {
+        window.location.href = 'login.html';
+    }
 };
 
 // 2.6.4 Contacts page handler

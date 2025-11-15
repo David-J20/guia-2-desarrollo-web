@@ -8,12 +8,15 @@
 }
 
 :root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --accent-color: #e74c3c;
-    --text-color: #333;
-    --light-bg: #f5f5f5;
-    --white: #ffffff;
+    --primary-bg: #f4f6fb;
+    --card-bg: #fff;
+    --primary-color: #2563eb;
+    --primary-hover: #1e40af;
+    --accent-color: #38bdf8;
+    --text-color: #22223b;
+    --nav-bg: #22223b;
+    --footer-bg: #22223b;
+    --white: #fff;
 }
 
 body {
@@ -22,19 +25,99 @@ body {
     color: var(--text-color);
 }
 
-/* 2.6.2 Estilos de encabezado y navegación usando Flexbox */
-.main-header {
-    background-color: var(--primary-color);
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+body.login-bg, body.index-bg {
+    background: var(--primary-bg);
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
 }
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Fondo oscuro y centrado para login */
+.login-bg {
+    background: linear-gradient(120deg, #232946 0%, #1a1a2e 100%);
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
     display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.login-main-container, .index-main-container {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
+}
+
+.login-header, .index-header {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 2rem 2rem 0 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--nav-bg);
+}
+
+.logo h1 {
+    color: var(--white);
+    font-size: 2rem;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.login-nav, .index-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-link.active, .nav-link:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+main {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container, .features, .companies, .demo-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+    padding: 2.5rem 2rem;
+    margin: 2rem auto;
+    max-width: 400px;
+    width: 100%;
+    color: var(--text-color);
+}
+
+.hero {
+    background: var(--accent-color);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 2rem 2rem;
+    margin: 2rem auto 0 auto;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
 }
 
 .logo h1 {
@@ -45,14 +128,17 @@ body {
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 1.2rem;
+    align-items: center;
 }
 
 .nav-menu a {
     color: var(--white);
     text-decoration: none;
     padding: 0.5rem 1rem;
-    transition: color 0.3s ease;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
 }
 
 .nav-menu a:hover {
@@ -63,16 +149,28 @@ body {
     border-bottom: 2px solid var(--secondary-color);
 }
 
+.nav-menu a.nav-login {
+    background: var(--secondary-color);
+    color: var(--white);
+    margin-left: 0.5rem;
+}
+
+.nav-menu a.nav-login:hover {
+    background: #2980b9;
+}
+
 .logout-btn {
     background-color: var(--accent-color);
+    color: var(--white);
     padding: 0.5rem 1rem;
     border-radius: 4px;
+    font-weight: 500;
+    margin-left: 0.5rem;
     transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-    background-color: #c0392b;
-    color: var(--white);
+    background-color: var(--primary-hover);
 }
 
 /* 2.6.2 Estilos del contenido principal usando CSS Grid */
@@ -126,18 +224,110 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: var(--white);
-    padding: 0.8rem 1.5rem;
+    padding: 0.7rem 1.2rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.3s ease;
+    min-width: 120px;
+    max-width: 220px;
+    box-shadow: 0 2px 6px rgba(44,62,80,0.07);
+    margin: 0.5rem auto;
+    display: inline-block;
 }
 
 .btn-primary:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-hover);
+}
+
+.login-form button.btn-primary,
+#registerForm button.btn-primary {
+    width: 100%;
+    max-width: 220px;
+    margin: 1rem auto 0 auto;
+    display: block;
+    font-size: 1.05rem;
+    padding: 0.7rem 0;
+}
+
+/* 2.5.9 & 2.6.2 Estilos para tabs de autenticación (Login/Register) */
+.auth-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 0;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.auth-tabs {
+    display: flex;
+    background-color: var(--light-bg);
+    border-bottom: 2px solid #ddd;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button.active {
+    color: var(--secondary-color);
+    border-bottom-color: var(--secondary-color);
+    background-color: var(--white);
+}
+
+.tab-button:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.tab-content {
+    display: none;
+    padding: 2rem;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 /* 2.6.2 Estilos de perfil */
@@ -273,26 +463,114 @@ body {
     margin-top: 1rem;
 }
 
-.user-icon {
-    display: inline-block;
-    width: 150px;
-    height: 150px;
+/* --- Mejoras visuales para profile.html --- */
+.improved-profile {
+    background: linear-gradient(120deg, #f5faff 0%, #eaf6fb 100%);
+    padding: 2rem 0;
+    min-height: 100vh;
+}
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: var(--white);
+    box-shadow: 0 4px 16px rgba(44,62,80,0.08);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+.user-avatar {
+    width: 90px;
+    height: 90px;
+    background: #eaf6fb;
     border-radius: 50%;
-    background-color: var(--secondary-color);
-    position: relative;
-    background-image: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="%23ffffff"/></svg>');
-    background-size: 60%;
-    background-position: center;
-    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.07);
 }
-
-.user-icon.user-frontend {
-    background-color: var(--secondary-color);
+.user-icon {
+    font-size: 3rem;
+    color: var(--secondary-color);
 }
-
-.user-icon.user-backend {
-    background-color: var(--accent-color);
+.user-info h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
 }
+.user-info p {
+    font-size: 1.1rem;
+    color: #555;
+}
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.profile-block {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+    padding: 1.5rem 1.2rem;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.profile-block h3 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.skills-list, #experienceList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.skill-tag {
+    background: #eaf6fb;
+    color: var(--primary-color);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+}
+.experience-item {
+    background: #f5faff;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+}
+.github-section, .github-content {
+    width: 100%;
+}
+.github-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+#githubUsername {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .user-card {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+/* --- Fin mejoras profile --- */
 
 /* 2.6.2 Estilos de la sección de contactos */
 .contacts-container {
@@ -411,4 +689,150 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
+}
+
+.main-footer {
+    background: var(--footer-bg);
+    color: var(--white);
+    padding: 1.2rem 0 0.7rem 0;
+    text-align: center;
+    margin-top: auto;
+    width: 100vw;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.05rem;
+}
+
+.footer-sep {
+    color: #bbb;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+    .login-header, .index-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.2rem 0.7rem 0 0.7rem;
+    }
+    .auth-container, .features, .companies, .demo-section {
+        padding: 1.2rem 0.5rem;
+        min-width: 90vw;
+        max-width: 98vw;
+    }
+    .footer-content {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+}
+
+/* Layout profesional para index */
+.index-bg {
+    background: linear-gradient(120deg, #232946 0%, #1a1a2e 100%);
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+.index-main-container {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.index-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 2rem 0 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+.logo h1 {
+    color: var(--white);
+    font-size: 2rem;
+    margin: 0;
+}
+.index-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+.nav-link.active {
+    background: var(--secondary-color);
+    color: var(--white);
+}
+.nav-link:hover {
+    background: var(--secondary-color);
+    color: var(--white);
+}
+.logout-btn {
+    background-color: var(--accent-color);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+.index-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    min-height: 0;
+}
+.main-footer {
+    background: var(--footer-bg);
+    color: var(--white);
+    padding: 1.2rem 0 0.7rem 0;
+    text-align: center;
+    margin-top: auto;
+    width: 100vw;
+}
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.05rem;
+}
+.footer-sep {
+    color: #bbb;
+    font-size: 1.2rem;
+}
+@media (max-width: 600px) {
+    .index-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.2rem 0.7rem 0 0.7rem;
+    }
+    .index-content {
+        padding: 0 0.5rem;
+    }
+    .footer-content {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
 }

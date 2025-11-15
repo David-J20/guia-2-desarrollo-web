@@ -8,91 +8,83 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
-<body>
-    <!-- 2.6.1 Encabezado semántico con navegación -->
-    <header class="main-header">
-        <nav class="nav-container">
+<body class="index-bg">
+    <div class="index-main-container">
+        <header class="index-header">
             <div class="logo">
                 <h1>IT Connect</h1>
             </div>
-            <ul class="nav-menu">
-                <li><a href="index.html" class="active">Inicio</a></li>
-                <li><a href="login.html">Iniciar Sesión</a></li>
-                <li><a href="profile.html" style="display: none;">Perfil</a></li>
-                <li><a href="contacts.html" style="display: none;">Red de Contactos</a></li>
-                <li><a href="#" id="logoutBtn" class="logout-btn" style="display: none;">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-    <!-- 2.6.1 Secciones principales usando etiquetas semánticas -->
-        <section class="hero">
-            <h2>Conecta con Profesionales IT</h2>
-            <p>Únete a la red profesional líder en el sector de tecnología</p>
-        </section>
-
-        <section class="features">
-            <h3>Características Principales</h3>
-            <div class="features-grid">
-                <article class="feature-card">
-                    <h4>Networking Profesional</h4>
-                    <p>Conecta con expertos del sector IT</p>
-                </article>
-                <article class="feature-card">
-                    <h4>Proyectos Colaborativos</h4>
-                    <p>Participa en proyectos innovadores</p>
-                </article>
-                <article class="feature-card">
-                    <h4>Oportunidades Laborales</h4>
-                    <p>Encuentra tu próximo desafío profesional</p>
-                </article>
+            <nav class="index-nav">
+                <a href="index.html" class="nav-link active">Inicio</a>
+                <a href="contacts.html" class="nav-link">Red de Contactos</a>
+                <a href="profile.html" class="nav-link">Perfil</a>
+                <a href="login.html" class="nav-link nav-login">Iniciar Sesión</a>
+                <a href="#" id="logoutBtn" class="logout-btn" style="display:none;">Cerrar Sesión</a>
+            </nav>
+        </header>
+        <main class="index-content">
+            <section class="hero">
+                <h2>Conecta con Profesionales IT</h2>
+                <p>Únete a la red profesional líder en el sector de tecnología</p>
+            </section>
+            <section class="features">
+                <h3>Características Principales</h3>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <h4>Networking Profesional</h4>
+                        <p>Conecta con expertos del sector IT</p>
+                    </article>
+                    <article class="feature-card">
+                        <h4>Proyectos Colaborativos</h4>
+                        <p>Participa en proyectos innovadores</p>
+                    </article>
+                    <article class="feature-card">
+                        <h4>Oportunidades Laborales</h4>
+                        <p>Encuentra tu próximo desafío profesional</p>
+                    </article>
+                </div>
+            </section>
+            <section class="companies">
+                <h3>Empresas Destacadas en IT</h3>
+                <div class="companies-grid">
+                    <article class="company-card">
+                        <i class="company-icon microsoft"></i>
+                        <h4>Microsoft</h4>
+                        <p>Líder en software y servicios cloud</p>
+                    </article>
+                    <article class="company-card">
+                        <i class="company-icon google"></i>
+                        <h4>Google</h4>
+                        <p>Innovación en tecnología y servicios web</p>
+                    </article>
+                    <article class="company-card">
+                        <i class="company-icon amazon"></i>
+                        <h4>Amazon</h4>
+                        <p>Líder en e-commerce y servicios cloud</p>
+                    </article>
+                    <article class="company-card">
+                        <i class="company-icon meta"></i>
+                        <h4>Meta</h4>
+                        <p>Pioneros en redes sociales y metaverso</p>
+                    </article>
+                </div>
+            </section>
+            <section class="demo-section">
+                <h3>🚀 Mashup: Integración con GitHub</h3>
+                <p>Descubre cómo integramos la API de GitHub para mostrar perfiles de desarrolladores en tiempo real</p>
+                <a href="github-demo.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Probar Demo de GitHub →</a>
+            </section>
+        </main>
+        <footer class="main-footer">
+            <div class="footer-content">
+                <span>&copy; 2025 IT Connect</span>
+                <span class="footer-sep">|</span>
+                <span>Universidad EAN</span>
             </div>
-        </section>
-
-    <!-- Nueva sección de empresas importantes (mejora del aprovechamiento de espacio) -->
-        <section class="companies">
-            <h3>Empresas Destacadas en IT</h3>
-            <div class="companies-grid">
-                <article class="company-card">
-                    <i class="company-icon microsoft"></i>
-                    <h4>Microsoft</h4>
-                    <p>Líder en software y servicios cloud</p>
-                </article>
-                <article class="company-card">
-                    <i class="company-icon google"></i>
-                    <h4>Google</h4>
-                    <p>Innovación en tecnología y servicios web</p>
-                </article>
-                <article class="company-card">
-                    <i class="company-icon amazon"></i>
-                    <h4>Amazon</h4>
-                    <p>Líder en e-commerce y servicios cloud</p>
-                </article>
-                <article class="company-card">
-                    <i class="company-icon meta"></i>
-                    <h4>Meta</h4>
-                    <p>Pioneros en redes sociales y metaverso</p>
-                </article>
-            </div>
-        </section>
-
-        <!-- Sección de Mashup: Demo de GitHub -->
-        <section class="demo-section">
-            <h3>🚀 Mashup: Integración con GitHub</h3>
-            <p>Descubre cómo integramos la API de GitHub para mostrar perfiles de desarrolladores en tiempo real</p>
-            <a href="github-demo.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Probar Demo de GitHub →</a>
-        </section>
-    </main>
-
-    <!-- 2.6.1 Pie de página semántico -->
-    <footer>
-        <p>&copy; 2025 IT Connect - Universidad EAN</p>
-    </footer>
-
-    <!-- JavaScript imports -->
-    <script src="js/data.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/main.js"></script>
+        </footer>
+        <script src="js/data.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/main.js"></script>
+    </div>
 </body>
 </html>

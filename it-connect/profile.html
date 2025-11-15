@@ -17,55 +17,57 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="login.html">Iniciar Sesión</a></li>
                 <li><a href="profile.html" class="active">Perfil</a></li>
-                <li><a href="contacts.html">Red de Contactos</a></li>
+                <li><a href="#" id="logoutBtn" class="logout-btn" style="display:none;">Cerrar Sesión</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <!-- 2.6.1 Sección de información del perfil -->
-        <section class="profile-container">
-            <div class="profile-header">
-                <div class="profile-image">
-                    <!-- Usando icono en lugar de foto de perfil -->
+        <!-- Perfil mejorado visualmente -->
+        <section class="profile-container improved-profile">
+            <div class="user-card">
+                <div class="user-avatar">
                     <i class="user-icon" id="profileIcon"></i>
                 </div>
-                <div class="profile-info">
+                <div class="user-info">
                     <h2 id="userName">Nombre del Usuario</h2>
-                    <p id="userTitle">Título Profesional</p>
+                    <p id="userTitle">Especialidad</p>
                 </div>
             </div>
-
-            <section class="profile-details">
-                <h3>Información Profesional</h3>
-                <div class="skills-section">
-                    <h4>Habilidades</h4>
-                    <div id="skillsList" class="skills-list">
-                        <!-- Habilidades cargadas por JavaScript -->
-                    </div>
+            <div class="profile-grid">
+                <div class="profile-block">
+                    <h3>Habilidades</h3>
+                    <form id="addSkillForm" class="add-form">
+                        <input type="text" id="newSkill" placeholder="Agregar habilidad..." required>
+                        <button type="submit" class="btn-primary">Agregar</button>
+                    </form>
+                    <div id="skillsList" class="skills-list"></div>
                 </div>
-
-                <div class="experience-section">
-                    <h4>Experiencia</h4>
-                    <div id="experienceList">
-                        <!-- Experiencia cargada por JavaScript -->
-                    </div>
+                <div class="profile-block">
+                    <h3>Experiencia</h3>
+                    <form id="addExpForm" class="add-form">
+                        <input type="text" id="newExpPosition" placeholder="Cargo" required>
+                        <input type="text" id="newExpCompany" placeholder="Empresa" required>
+                        <input type="text" id="newExpPeriod" placeholder="Periodo" required>
+                        <button type="submit" class="btn-primary">Agregar</button>
+                    </form>
+                    <div id="experienceList"></div>
                 </div>
-
-                <!-- Mashup: Sección de GitHub -->
-                <div class="github-section">
-                    <h4>Perfil de GitHub</h4>
+                <div class="profile-block">
+                    <h3>Buscar Contactos</h3>
+                    <input type="text" id="searchContacts" placeholder="Buscar por nombre o habilidad">
+                    <div id="contactsList" class="contacts-list"></div>
+                </div>
+                <div class="profile-block">
+                    <h3>Perfil de GitHub</h3>
                     <div class="github-input">
                         <input type="text" id="githubUsername" placeholder="Ingresa tu usuario de GitHub">
                         <button id="loadGithubBtn" class="btn-primary">Cargar Perfil</button>
                     </div>
-                    <div id="githubContent" class="github-content">
-                        <!-- Contenido de GitHub cargado dinámicamente -->
-                    </div>
+                    <div id="githubContent" class="github-content"></div>
                 </div>
-            </section>
+            </div>
         </section>
     </main>
 
