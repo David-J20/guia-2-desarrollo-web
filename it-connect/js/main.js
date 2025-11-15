@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const profilePage = document.getElementById('userName');
     if (profilePage) {
         loadProfileData();
+        initializeGithubSection();
     }
 
     // Contacts page handling
@@ -152,4 +153,111 @@ const renderContacts = (users) => {
         `;
         contactsList.appendChild(contactCard);
     });
+};
+
+// 2.6.4 Mashup: Inicializar sección de GitHub
+const initializeGithubSection = () => {
+    const loadGithubBtn = document.getElementById('loadGithubBtn');
+    const githubInput = document.getElementById('githubUsername');
+
+    if (loadGithubBtn && githubInput) {
+        loadGithubBtn.addEventListener('click', () => {
+            const username = githubInput.value.trim();
+            if (username) {
+                loadGithubProfile(username);
+            } else {
+                showGithubError('Por favor ingresa un nombre de usuario de GitHub');
+            }
+        });
+
+        // Permitir cargar con Enter
+        githubInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loadGithubBtn.click();
+            }
+        });
+    }
+};
+
+// 2.6.4 Mashup: Cargar datos de GitHub
+const loadGithubProfile = async (username) => {
+    const githubContent = document.getElementById('githubContent');
+    githubContent.innerHTML = '<p>Cargando datos de GitHub...</p>';
+
+    try {
+        const userInfo = await githubModule.getCompleteUserInfo(username);
+
+        if (!userInfo) {
+            showGithubError(`Usuario "${username}" no encontrado en GitHub`);
+            return;
+        }
+
+        // Construir HTML con datos de GitHub
+        let html = '<div class="github-stats">';
+        html += `<div class="github-stat">
+            <div class="stat-number">${userInfo.repos}</div>
+            <div class="stat-label">Repositorios</div>
+        </div>`;
+        html += `<div class="github-stat">
+            <div class="stat-number">${userInfo.followers}</div>
+            <div class="stat-label">Seguidores</div>
+        </div>`;
+        html += `<div class="github-stat">
+            <div class="stat-number">${userInfo.gists}</div>
+            <div class="stat-label">Gists</div>
+        </div>`;
+        html += '</div>';
+
+        // Mostrar ubicación si está disponible
+        if (userInfo.location) {
+            html += `<p><strong>Ubicación:</strong> ${userInfo.location}</p>`;
+        }
+
+        // Mostrar bio si está disponible
+        if (userInfo.bio) {
+            html += `<p><strong>Bio:</strong> ${userInfo.bio}</p>`;
+        }
+
+        // Mostrar repositorios destacados
+        if (userInfo.topRepos && userInfo.topRepos.length > 0) {
+            html += '<div class="github-repos"><h5>⭐ Repositorios Destacados</h5>';
+            userInfo.topRepos.forEach(repo => {
+                html += `
+                    <div class="repo-item">
+                        <h6><a href="${repo.html_url}" target="_blank">${repo.name}</a></h6>
+                        <p>${repo.description || 'Sin descripción'}</p>
+                        <div class="repo-stats">
+                            ⭐ ${repo.stargazers_count} stars | 
+                            🍴 ${repo.forks_count} forks | 
+                            ${repo.language || 'Sin lenguaje específico'}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        // Mostrar lenguajes principales
+        if (userInfo.topLanguages && userInfo.topLanguages.length > 0) {
+            html += '<div class="github-languages"><h5>💻 Lenguajes Principales</h5><div class="language-tags">';
+            userInfo.topLanguages.forEach(([lang, count]) => {
+                html += `<span class="language-tag">${lang}</span>`;
+            });
+            html += '</div></div>';
+        }
+
+        // Agregar enlace al perfil
+        html += `<p><a href="${userInfo.profileUrl}" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Ver Perfil en GitHub →</a></p>`;
+
+        githubContent.innerHTML = html;
+    } catch (error) {
+        console.error('Error al cargar perfil de GitHub:', error);
+        showGithubError('Error al cargar los datos de GitHub. Intenta más tarde.');
+    }
+};
+
+// 2.6.4 Mostrar error de GitHub
+const showGithubError = (message) => {
+    const githubContent = document.getElementById('githubContent');
+    githubContent.innerHTML = `<div class="github-error">${message}</div>`;
 };

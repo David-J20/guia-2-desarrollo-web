@@ -157,6 +157,122 @@ body {
     margin-bottom: 2rem;
 }
 
+/* Mashup: Estilos para la sección de GitHub */
+.github-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--light-bg);
+}
+
+.github-input {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.github-input input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.github-content {
+    margin-top: 1.5rem;
+}
+
+.github-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.github-stat {
+    background-color: var(--light-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.github-stat .stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.github-stat .stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.github-repos {
+    margin: 2rem 0;
+}
+
+.github-repos h5 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.repo-item {
+    background-color: var(--light-bg);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.repo-item h6 {
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+.repo-item p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.repo-stats {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.github-languages {
+    margin: 2rem 0;
+}
+
+.github-languages h5 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.language-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.language-tag {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.github-error {
+    color: var(--accent-color);
+    padding: 1rem;
+    background-color: #ffe8e8;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
 .user-icon {
     display: inline-block;
     width: 150px;
@@ -264,6 +380,28 @@ body {
 
 .company-icon.meta {
     background-image: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="%231877F2"/></svg>');
+}
+
+/* Mashup: Estilos para la sección demo */
+.demo-section {
+    background-color: var(--light-bg);
+    padding: 2rem;
+    margin: 2rem 0;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.demo-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.demo-section p {
+    color: #666;
+    margin-bottom: 1rem;
 }
 
 /* 2.6.2 Estilos del pie de página */

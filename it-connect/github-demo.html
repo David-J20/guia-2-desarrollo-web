@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!-- Demo de Integración con GitHub API -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo GitHub - IT Connect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Encabezado con navegación -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <h1>IT Connect</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="github-demo.html" class="active">Demo GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección de GitHub Demo -->
+        <section class="profile-container">
+            <h2>🚀 Demo: Integración con GitHub API</h2>
+            <p>Prueba la integración con GitHub. Ingresa cualquier nombre de usuario público de GitHub para ver:</p>
+            <ul style="margin: 1rem 0;">
+                <li>✨ Estadísticas del perfil (repos, followers, gists)</li>
+                <li>📊 Top 3 repositorios destacados</li>
+                <li>💻 Lenguajes de programación principales</li>
+                <li>📍 Ubicación y biografía</li>
+            </ul>
+
+            <div class="github-section">
+                <h3>Buscar Desarrollador en GitHub</h3>
+                <div class="github-input">
+                    <input type="text" id="githubUsername" placeholder="Ej: torvalds, github, google..." autofocus>
+                    <button id="loadGithubBtn" class="btn-primary">Cargar Perfil</button>
+                </div>
+                <div id="githubContent" class="github-content">
+                    <p style="color: #666; text-align: center;">Ingresa un nombre de usuario para comenzar</p>
+                </div>
+            </div>
+
+            <div style="background-color: #f0f7ff; padding: 1rem; border-radius: 4px; margin-top: 2rem;">
+                <h4>💡 Ejemplos para probar:</h4>
+                <p>Haz clic en uno de estos para probar rápidamente:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <button onclick="loadExample('torvalds')" class="btn-secondary">Linus Torvalds</button>
+                    <button onclick="loadExample('gvanrossum')" class="btn-secondary">Guido van Rossum</button>
+                    <button onclick="loadExample('brendan')" class="btn-secondary">Brendan Eich</button>
+                    <button onclick="loadExample('github')" class="btn-secondary">GitHub</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 IT Connect - Universidad EAN</p>
+    </footer>
+
+    <script src="js/github.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // Funciones para la demo
+        const initializeDemo = () => {
+            const loadGithubBtn = document.getElementById('loadGithubBtn');
+            const githubInput = document.getElementById('githubUsername');
+
+            loadGithubBtn.addEventListener('click', () => {
+                const username = githubInput.value.trim();
+                if (username) {
+                    loadGithubProfile(username);
+                } else {
+                    showGithubError('Por favor ingresa un nombre de usuario de GitHub');
+                }
+            });
+
+            githubInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    loadGithubBtn.click();
+                }
+            });
+        };
+
+        const loadExample = (username) => {
+            document.getElementById('githubUsername').value = username;
+            loadGithubProfile(username);
+        };
+
+        const loadGithubProfile = async (username) => {
+            const githubContent = document.getElementById('githubContent');
+            githubContent.innerHTML = '<p style="text-align: center;">Cargando datos de GitHub...</p>';
+
+            try {
+                const userInfo = await githubModule.getCompleteUserInfo(username);
+
+                if (!userInfo) {
+                    showGithubError(`Usuario "${username}" no encontrado en GitHub`);
+                    return;
+                }
+
+                let html = '<div class="github-stats">';
+                html += `<div class="github-stat">
+                    <div class="stat-number">${userInfo.repos}</div>
+                    <div class="stat-label">Repositorios</div>
+                </div>`;
+                html += `<div class="github-stat">
+                    <div class="stat-number">${userInfo.followers}</div>
+                    <div class="stat-label">Seguidores</div>
+                </div>`;
+                html += `<div class="github-stat">
+                    <div class="stat-number">${userInfo.gists}</div>
+                    <div class="stat-label">Gists</div>
+                </div>`;
+                html += '</div>';
+
+                if (userInfo.location) {
+                    html += `<p><strong>📍 Ubicación:</strong> ${userInfo.location}</p>`;
+                }
+
+                if (userInfo.bio) {
+                    html += `<p><strong>👤 Bio:</strong> ${userInfo.bio}</p>`;
+                }
+
+                if (userInfo.topRepos && userInfo.topRepos.length > 0) {
+                    html += '<div class="github-repos"><h4>⭐ Repositorios Destacados</h4>';
+                    userInfo.topRepos.forEach(repo => {
+                        html += `
+                            <div class="repo-item">
+                                <h6><a href="${repo.html_url}" target="_blank">${repo.name}</a></h6>
+                                <p>${repo.description || 'Sin descripción'}</p>
+                                <div class="repo-stats">
+                                    ⭐ ${repo.stargazers_count} stars | 
+                                    🍴 ${repo.forks_count} forks | 
+                                    ${repo.language || 'Sin lenguaje específico'}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                if (userInfo.topLanguages && userInfo.topLanguages.length > 0) {
+                    html += '<div class="github-languages"><h4>💻 Lenguajes Principales</h4><div class="language-tags">';
+                    userInfo.topLanguages.forEach(([lang, count]) => {
+                        html += `<span class="language-tag">${lang}</span>`;
+                    });
+                    html += '</div></div>';
+                }
+
+                html += `<p style="margin-top: 1rem;"><a href="${userInfo.profileUrl}" target="_blank" class="btn-primary">Ver Perfil en GitHub →</a></p>`;
+
+                githubContent.innerHTML = html;
+            } catch (error) {
+                console.error('Error al cargar perfil de GitHub:', error);
+                showGithubError('Error al cargar los datos de GitHub. Intenta más tarde.');
+            }
+        };
+
+        const showGithubError = (message) => {
+            const githubContent = document.getElementById('githubContent');
+            githubContent.innerHTML = `<div class="github-error">${message}</div>`;
+        };
+
+        // Inicializar cuando carga la página
+        document.addEventListener('DOMContentLoaded', initializeDemo);
+    </script>
+
+    <style>
+        .btn-secondary {
+            background-color: #3498db;
+            color: white;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</body>
+</html>

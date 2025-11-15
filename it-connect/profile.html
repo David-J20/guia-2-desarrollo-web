@@ -43,14 +43,26 @@
                 <div class="skills-section">
                     <h4>Habilidades</h4>
                     <div id="skillsList" class="skills-list">
-                        <!-- Skills will be populated by JavaScript -->
+                        <!-- Habilidades cargadas por JavaScript -->
                     </div>
                 </div>
 
                 <div class="experience-section">
                     <h4>Experiencia</h4>
                     <div id="experienceList">
-                        <!-- Experience will be populated by JavaScript -->
+                        <!-- Experiencia cargada por JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Mashup: Sección de GitHub -->
+                <div class="github-section">
+                    <h4>Perfil de GitHub</h4>
+                    <div class="github-input">
+                        <input type="text" id="githubUsername" placeholder="Ingresa tu usuario de GitHub">
+                        <button id="loadGithubBtn" class="btn-primary">Cargar Perfil</button>
+                    </div>
+                    <div id="githubContent" class="github-content">
+                        <!-- Contenido de GitHub cargado dinámicamente -->
                     </div>
                 </div>
             </section>
@@ -63,6 +75,7 @@
 
     <script src="js/data.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/github.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
